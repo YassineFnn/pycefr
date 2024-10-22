@@ -72,7 +72,100 @@ def levels(self):
         level_Assert(self)
     elif self.attrib == 'ast.With':
         level_With(self)
-
+    elif self.attrib == 'ast.FormattedValue':
+        level_formatted_value(self)
+    elif self.attrib == 'ast.JoinedStr':
+        level_joined_str(self)
+    elif self.attrib == 'ast.Set':
+        level_set(self)
+    elif self.attrib == 'ast.Load':
+        level_load(self)
+    elif self.attrib == 'ast.Store':
+        level_store(self)
+    elif self.attrib == 'ast.Del':
+        level_del(self)
+    elif self.attrib == 'ast.Starred':
+        level_starred(self)
+    elif self.attrib == 'ast.NamedExpr':
+        level_named_expr(self)
+    elif self.attrib == 'ast.UnaryOp':
+        level_unary_op(self)
+    elif self.attrib == 'ast.UAdd':
+        level_u_add(self)
+    elif self.attrib == 'ast.USub':
+        level_u_sub(self)
+    elif self.attrib == 'ast.Not':
+        level_not(self)
+    elif self.attrib == 'ast.Invert':
+        level_invert(self)
+    elif self.attrib == 'ast.Div':
+        level_div(self)
+    elif self.attrib == 'ast.FloorDiv':
+        level_floor_div(self)
+    elif self.attrib == 'ast.Mod':
+        level_mod(self)
+    elif self.attrib == 'ast.Pow':
+        level_pow(self)
+    elif self.attrib == 'ast.LShift':
+        level_l_shift(self)
+    elif self.attrib == 'ast.RShift':
+        level_r_shift(self)
+    elif self.attrib == 'ast.BitOr':
+        level_bit_or(self)
+    elif self.attrib == 'ast.BitXor':
+        level_bit_xor(self)
+    elif self.attrib == 'ast.BitAnd':
+        level_bit_and(self)
+    elif self.attrib == 'ast.MatMult':
+        level_mat_mult(self)
+    elif self.attrib == 'ast.BoolOp':
+        level_bool_op(self)
+    elif self.attrib == 'ast.And':
+        level_and(self)
+    elif self.attrib == 'ast.Or':
+        level_or(self)
+    elif self.attrib == 'ast.Subscript':
+        level_subscript(self)
+    elif self.attrib == 'ast.Slice':
+        level_slice(self)
+    elif self.attrib == 'ast.SetComp':
+        level_set_comp(self)
+    elif self.attrib == 'ast.comprehension':
+        level_comprehension(self)
+    elif self.attrib == 'ast.AnnAssign':
+        level_ann_assign(self)
+    elif self.attrib == 'ast.Delete':
+        level_delete(self)
+    elif self.attrib == 'ast.alias':
+        level_alias(self)
+    elif self.attrib == 'ast.TryStar':
+        level_try_star(self)
+    elif self.attrib == 'ast.ExceptHandler':
+        level_except_handler(self)
+    elif self.attrib == 'ast.withitem':
+        level_withitem(self)
+    elif self.attrib == 'ast.MatchValue':
+        level_match_value(self)
+    elif self.attrib == 'ast.MatchSingleton':
+        level_match_singleton(self)
+    elif self.attrib == 'ast.MatchSequence':
+        level_match_sequence(self)
+    elif self.attrib == 'ast.MatchMapping':
+        level_match_mapping(self)
+    elif self.attrib == 'ast.MatchClass':
+        level_match_class(self)
+    elif self.attrib == 'ast.MatchStar':
+        level_match_star(self)
+    elif self.attrib == 'ast.MatchAs':
+        level_match_as(self)
+    elif self.attrib == 'ast.MatchOr':
+        level_match_or(self)
+    elif self.attrib == 'ast.Match':
+        level_match(self)
+    elif self.attrib == 'ast.match_case':
+        level_match_case(self)
+    elif self.attrib == 'ast.TypeIgnore':
+        level_type_ignore(self)
 
 def level_List(self):
     """ List level. """
@@ -699,3 +792,191 @@ def level_With(self):
     """ with level. """
     self.level = dictLevel['With'][0]['simple']
     self.clase = ('With')
+
+def level_formatted_value(self):
+    self.level = dictLevel['FormattedValue'][0]['simple']
+    self.clase = 'Formatted Value'
+    
+def level_joined_str(self):
+    self.level = dictLevel['JoinedStr'][0]['simple']
+    self.clase = ('Joined String')
+
+def level_set (self):
+    self.level = dictLevel['Set'][0]['simple']
+    self.clase = ('Set')
+
+def level_load(self):
+    self.level = dictLevel['Load'][0]['simple']
+    self.clase = ('Load')
+    
+def level_store(self):
+    self.level = dictLevel['Store'][0]['simple']
+    self.clase = ('Store')
+
+def level_del(self):
+    self.level = dictLevel['Del'][0]['simple']
+    self.clase = ('Del')
+
+def level_starred(self):
+    self.level = dictLevel['Starred'][0]['simple']
+    self.clase = ('Starred')
+    
+def level_named_expr(self):
+    self.level = dictLevel['NamedExpr'][0]['simple']
+    self.clase = 'Named Expression'
+
+def level_unary_op(self):
+    self.level = dictLevel['UnaryOp'][0]['simple']
+    self.clase = 'Unary Operation'
+
+def level_u_add(self):
+    self.level = dictLevel['UAdd'][0]['simple']
+    self.clase = 'Unary Add'
+
+def level_u_sub(self):
+    self.level = dictLevel['USub'][0]['simple']
+    self.clase = 'Unary Subtract'
+
+def level_not(self):
+    self.level = dictLevel['Not'][0]['simple']
+    self.clase = 'Not'
+
+def level_invert(self):
+    self.level = dictLevel['Invert'][0]['simple']
+    self.clase = 'Invert'
+
+def level_div(self):
+    self.level = dictLevel['Div'][0]['simple']
+    self.clase = 'Division'
+
+def level_floor_div(self):
+    self.level = dictLevel['FloorDiv'][0]['simple']
+    self.clase = 'Floor Division'
+
+def level_mod(self):
+    self.level = dictLevel['Mod'][0]['simple']
+    self.clase = 'Modulus'
+
+def level_pow(self):
+    self.level = dictLevel['Pow'][0]['simple']
+    self.clase = 'Power'
+
+def level_l_shift(self):
+    self.level = dictLevel['LShift'][0]['simple']
+    self.clase = 'Left Shift'
+
+def level_r_shift(self):
+    self.level = dictLevel['RShift'][0]['simple']
+    self.clase = 'Right Shift'
+
+def level_bit_or(self):
+    self.level = dictLevel['BitOr'][0]['simple']
+    self.clase = 'Bitwise Or'
+
+def level_bit_xor(self):
+    self.level = dictLevel['BitXor'][0]['simple']
+    self.clase = 'Bitwise Xor'
+
+def level_bit_and(self):
+    self.level = dictLevel['BitAnd'][0]['simple']
+    self.clase = 'Bitwise And'
+
+def level_mat_mult(self):
+    self.level = dictLevel['MatMult'][0]['simple']
+    self.clase = 'Matrix Multiplication'
+
+def level_bool_op(self):
+    self.level = dictLevel['BoolOp'][0]['simple']
+    self.clase = 'Boolean Operation'
+
+def level_and(self):
+    self.level = dictLevel['And'][0]['simple']
+    self.clase = 'And'
+
+def level_or(self):
+    self.level = dictLevel['Or'][0]['simple']
+    self.clase = 'Or'
+    
+def level_subscript(self):
+    self.level = dictLevel['Subscript'][0]['simple']
+    self.clase = 'Subscript'
+
+def level_slice(self):
+    self.level = dictLevel['Slice'][0]['simple']
+    self.clase = 'Slice'
+
+def level_set_comp(self):
+    self.level = dictLevel['SetComp'][0]['simple']
+    self.clase = 'Set Comprehension'
+
+def level_comprehension(self):
+    self.level = dictLevel['comprehension'][0]['simple']
+    self.clase = 'Comprehension'
+
+def level_ann_assign(self):
+    self.level = dictLevel['AnnAssign'][0]['simple']
+    self.clase = 'Annotated Assignment'
+
+def level_delete(self):
+    self.level = dictLevel['Delete'][0]['simple']
+    self.clase = 'Delete'
+
+def level_alias(self):
+    self.level = dictLevel['alias'][0]['simple']
+    self.clase = 'Alias'
+
+def level_try_star(self):
+    self.level = dictLevel['TryStar'][0]['simple']
+    self.clase = 'Try Star'
+
+def level_except_handler(self):
+    self.level = dictLevel['ExceptHandler'][0]['simple']
+    self.clase = 'Except Handler'
+
+def level_withitem(self):
+    self.level = dictLevel['withitem'][0]['simple']
+    self.clase = 'With Item'
+
+def level_match_value(self):
+    self.level = dictLevel['MatchValue'][0]['simple']
+    self.clase = 'Match Value'
+
+def level_match_singleton(self):
+    self.level = dictLevel['MatchSingleton'][0]['simple']
+    self.clase = 'Match Singleton'
+
+def level_match_sequence(self):
+    self.level = dictLevel['MatchSequence'][0]['simple']
+    self.clase = 'Match Sequence'
+
+def level_match_mapping(self):
+    self.level = dictLevel['MatchMapping'][0]['simple']
+    self.clase = 'Match Mapping'
+
+def level_match_class(self):
+    self.level = dictLevel['MatchClass'][0]['simple']
+    self.clase = 'Match Class'
+
+def level_match_star(self):
+    self.level = dictLevel['MatchStar'][0]['simple']
+    self.clase = 'Match Star'
+
+def level_match_as(self):
+    self.level = dictLevel['MatchAs'][0]['simple']
+    self.clase = 'Match As'
+
+def level_match_or(self):
+    self.level = dictLevel['MatchOr'][0]['simple']
+    self.clase = 'Match Or'
+
+def level_match(self):
+    self.level = dictLevel['Match'][0]['simple']
+    self.clase = 'Match'
+
+def level_match_case(self):
+    self.level = dictLevel['match_case'][0]['simple']
+    self.clase = 'Match Case'
+
+def level_type_ignore(self):
+    self.level = dictLevel['TypeIgnore'][0]['simple']
+    self.clase = 'Type Ignore'

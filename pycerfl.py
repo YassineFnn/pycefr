@@ -8,27 +8,34 @@ import sys
 import shlex
 import subprocess
 import requests
+import json
 from ClassIterTree import IterTree
-from getjson import read_Json
+from getjson import read_Json, show_Results
 from getcsv import read_FileCsv
 
 
 # Create lists of each attribute
-Literals = ['ast.List', 'ast.Tuple', 'ast.Dict']
-Variables = ['ast.Name']
-Expressions = ['ast.Call', 'ast.IfExp', 'ast.Attribute']
-Comprehensions = ['ast.ListComp', 'ast.GeneratorExp', 'ast.DictComp']
+Literals = ['ast.List', 'ast.Tuple', 'ast.Dict', 'ast.FormattedValue', 'ast.JoinedStr', 'ast.Set']
+Variables = ['ast.Name', 'ast.Load', 'ast.Store', 'ast.Del', 'ast.Starred']
+Expressions = ['ast.Call', 'ast.IfExp', 'ast.Attribute', 'ast.NamedExpr', 'ast.UnaryOp', 'ast.UAdd', 'ast.USub', 
+               'ast.Not', 'ast.Invert', 'ast.Div', 'ast.FloorDiv', 'ast.Mod', 'ast.Pow', 'ast.LShift', 'ast.RShift', 
+               'ast.BitOr', 'ast.BitXor', 'ast.BitAnd', 'ast.MatMult', 'ast.BoolOp', 'ast.And', 'ast.Or']
+Subscripting = ['ast.Subscript', 'ast.Slice']
+Comprehensions = ['ast.ListComp', 'ast.GeneratorExp', 'ast.DictComp', 'ast.SetComp', 'ast.comprehension']
 Statements = ['ast.Assign', 'ast.AugAssign', 'ast.Raise', 'ast.Assert',
-              'ast.Pass']
-Imports = ['ast.Import', 'ast.ImportFrom']
+              'ast.Pass', 'ast.AnnAssign', 'ast.Delete']
+Imports = ['ast.Import', 'ast.ImportFrom', 'ast.alias']
 ControlFlow = ['ast.If', 'ast.For', 'ast.While', 'ast.Break', 'ast.Continue',
-               'ast.Try', 'ast.With']
+               'ast.Try', 'ast.With', 'ast.TryStar', 'ast.ExceptHandler', 'ast.withitem']
 FunctionsClass = ['ast.FunctionDef', 'ast.Lambda', 'ast.Return', 'ast.Yield',
                   'ast.ClassDef']
+Pattern_matching = [ 'ast.MatchValue', 'ast.MatchSingleton', 'ast.MatchSequence', 'ast.MatchMapping', 
+                    'ast.MatchClass', 'ast.MatchStar', 'ast.MatchAs', 'ast.MatchOr', 'ast.Match', 'ast.match_case' ]
+Type_parameters = ['ast.TypeIgnore']
 
 # Create list of attribute lists
-SetClass = [Literals, Variables, Expressions, Comprehensions, Statements,
-            Imports, ControlFlow, FunctionsClass]
+SetClass = [Literals, Variables, Expressions, Subscripting, Comprehensions, Statements,
+            Imports, ControlFlow, FunctionsClass, Pattern_matching, Type_parameters]
 
 
 def choose_option():
@@ -199,27 +206,75 @@ def read_File(pos, repo):
             print('There is a misspelled code')
             pass
 
+# Initialize a list to store IterTree instances
+iter_tree_instances = []
 
 def iterate_List(tree, pos, repo):
     """ Iterate list and assign attributes."""
     for i in range(0, len(SetClass)):
         for j in range(0, len(SetClass[i])):
             attrib = SetClass[i][j]
-            deepen(tree, attrib, pos, repo)
+            obj = deepen(tree, attrib, pos, repo)
+            iter_tree_instances.append(obj)
 
 
 def deepen(tree, attrib, pos, repo):
     """ Create class object """
     file = pos.split('/')[-1]
-    object = IterTree(tree, attrib, file, repo)
-
+    return IterTree(tree, attrib, file, repo)
 
 def summary_Levels():
-    """ Summary of directory levels """
-    result = read_Json()
-    read_FileCsv()
+    """ Summarize the analysis. """
+    dict_total, dict_summary, dict_repo, dict_unique_total = read_Json()
+    result, num_files = show_Results(dict_total, dict_summary, dict_repo, dict_unique_total)
     print(result)
+    
+    user_input = input("Do you want more detailed summary (y for yes and n for no): ")
+    if (user_input == 'y'):
+        # Load the JSON data from the file
+        with open('data.json', 'r') as file:
+            data = json.load(file)
 
+        # Variables to track total lines of code and detected lines
+        detected_lines_set = set()  # Use a set to track unique lines with constructs
+
+        # Iterate over the data and construct the output
+        output = {}
+
+        for file_name, constructs in data[""].items():
+            
+            for construct in constructs:
+                construct_class = construct.get("Class", "")
+                level = construct.get("Level", "")
+                
+                construct_name = construct_class.lower()
+                
+                # Initialize the level in the output dictionary if not already present
+                if level not in output:
+                    output[level] = {}
+                
+                # Increment the count for the construct_name within the appropriate level
+                if construct_name not in output[level]:
+                    output[level][construct_name] = 0
+                output[level][construct_name] += 1
+                
+        # Sort the levels and constructs
+        sorted_levels = sorted(output.items())
+
+        # Print the formatted output
+        for level, constructs in sorted_levels:
+            print(f"Level {level}:")
+            sorted_constructs = sorted(constructs.items(), key=lambda x: x[1], reverse=True)
+            for construct_name, count in sorted_constructs:
+                print(f"  Construct '{construct_name}': {count}")
+
+        print('=====================================\n')
+        
+        result = 0
+        for instance in iter_tree_instances:
+            result += instance.compute_percentage()
+        print("The percentage detected is: ", result/num_files, "%\n")
+        print('=====================================\n')
 
 if __name__ == "__main__":
     try:

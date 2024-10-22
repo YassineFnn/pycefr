@@ -1,0 +1,23 @@
+Repository,File Name,Class,Start Line,End Line,Displacement,Level
+,test.py,Formatted Value,13,13,6,A1
+,test.py,Formatted Value,16,16,6,A1
+,test.py,Formatted Value,19,19,6,A1
+,test.py,Formatted Value,20,20,6,A1
+,test.py,Joined String,13,13,6,A1
+,test.py,Joined String,16,16,6,A1
+,test.py,Joined String,19,19,6,A1
+,test.py,Joined String,20,20,6,A1
+,test.py,Print,13,13,0,A1
+,test.py,Print,16,16,0,A1
+,test.py,Print,19,19,0,A1
+,test.py,Print,20,20,0,A1
+,test.py,Simple Atributte,7,7,8,A2
+,test.py,Simple Atributte,13,13,29,A2
+,test.py,Simple Atributte,16,16,26,A2
+,test.py,Special Class Attribute __class__,19,19,30,B2
+,test.py,Special Class Attribute __dict__,20,20,29,B2
+,test.py,Simple Assignment,10,10,0,A1
+,test.py,Simple Assignment,3,3,4,A1
+,test.py,Simple Assignment,7,7,8,A1
+,test.py,Function with Simple argument,5,7,4,A1
+,test.py,Simple Class ,1,7,0,B1

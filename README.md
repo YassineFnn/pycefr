@@ -43,13 +43,35 @@ To put it into operation you have to follow the steps below:
   * Displacement
   * Level of element
 
+5. # Data Visualization with Bar Chart and Interactive Table
 
-5. If you want to visualize the results on a web page:
+This project demonstrates how to visualize data using a bar chart and an interactive table. The data is loaded from a `data.json` file, and the webpage is styled to be modern and responsive.
 
-    * Run the file 'main.js' to create the page 'index.html'. You will get one web page for each repository.
-      ```
-      node main.js
-      ```
+## Prerequisites
+
+- **Python 3.x** or **Node.js**
+
+## Getting Started
+
+You can use either Python's built-in HTTP server or a simple Node.js server to serve the webpage locally.
+
+Using Python
+If you have Python installed, you can start a simple HTTP server with the following command:
+
+For Python 3.x: python3 -m http.server 8000
+For Python 2.x: python -m SimpleHTTPServer 8000
+
+Using Node.js
+If you have Node.js installed, you can use the http-server package to serve the webpage:
+
+Install http-server globally if you haven't already:
+npm install -g http-server
+
+Start the server in the project directory:
+http-server -p 8000
+
+## View the Webpage
+Open your web browser and navigate to http://localhost:8000. You should see the webpage with the bar chart and interactive table.
 
 
 ## Of Interest

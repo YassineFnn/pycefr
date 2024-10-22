@@ -1,143 +1,170 @@
-"""
-PROGRAM TO OBTAIN SUMMARIES FROM JSON
-"""
-
 import json
 import os
 import re
-
-# Dictionary of all repositories and files
-dict_total = {}
-# Dictionary of all repositories
-dict_summary = {}
-# Dictionary of all files
-dict_repo = {}
-
+import configparser
+from collections import defaultdict
 
 def extract_Levels(data):
-    """ Extract repository levels. """
-    # Take out the repositories
+    """ Extract repository levels and classes. """
+    dict_total = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+    dict_summary = defaultdict(lambda: defaultdict(int))
+    dict_repo = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+    dict_unique_total = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+
     for repo in data.keys():
-        dict_total[repo] = {}
-        dict_repo[repo] = {}
-        for file in data[repo]:
-            dict_total[repo][file] = {}
-            for i in data[repo][file]:
-                level = i['Level']
-                if 'Levels' not in dict_summary:
-                    dict_summary['Levels'] = {}
-                ini_total('Levels', level)
-                if 'Levels' not in dict_repo[repo]:
-                    dict_repo[repo]['Levels'] = {}
-                ini_repo(repo, 'Levels', level)
+        for file, items in data[repo].items():
+            unique_levels = set()
+            unique_classes = set()
+            for item in items:
+                level = item.get('Level', '')
+                clase = re.sub(r"\s?\d", "", item.get('Class', ''))
+                
                 if 'Levels' not in dict_total[repo][file]:
-                    # Initialize the dictionary values to 0
-                    # Create the 'Levels' key
-                    dict_total[repo][file]['Levels'] = {}
-                ini_values(repo, file, 'Levels', level)
-                clase = i['Class']
-                # Remove numbers
-                clase = re.sub("\s?\d", "", clase)
-                if 'Class' not in dict_summary:
-                    dict_summary['Class'] = {}
-                ini_total('Class', clase)
-                if 'Class' not in dict_repo[repo]:
-                    dict_repo[repo]['Class'] = {}
-                ini_repo(repo, 'Class', clase)
-                if 'Class' not in dict_total[repo][file]:
-                    # Initialize the dictionary values to 0
-                    # Create the 'Class' key
-                    dict_total[repo][file]['Class'] = {}
-                ini_values(repo, file, 'Class', clase)
+                    dict_total[repo][file]['Levels'] = defaultdict(int)
+                if 'Classes' not in dict_total[repo][file]:
+                    dict_total[repo][file]['Classes'] = defaultdict(int)
+                
+                dict_total[repo][file]['Levels'][level] += 1
+                dict_total[repo][file]['Classes'][clase] += 1
+                
+                if level:
+                    dict_summary['Levels'][level] += 1
+                    unique_levels.add(level)
+                if clase:
+                    dict_summary['Classes'][clase] += 1
+                    unique_classes.add(clase)
+                
+                if 'Levels' not in dict_repo[repo][file]:
+                    dict_repo[repo][file]['Levels'] = defaultdict(int)
+                dict_repo[repo][file]['Levels'][level] += 1
+                
+                if 'Classes' not in dict_repo[repo][file]:
+                    dict_repo[repo][file]['Classes'] = defaultdict(int)
+                dict_repo[repo][file]['Classes'][clase] += 1
 
-        write_Results(repo)
+            # Track unique occurrences
+            for level in unique_levels:
+                if 'Levels' not in dict_unique_total[repo][file]:
+                    dict_unique_total[repo][file]['Levels'] = defaultdict(int)
+                dict_unique_total[repo][file]['Levels'][level] += 1
+                
+            for class_name in unique_classes:
+                if 'Classes' not in dict_unique_total[repo][file]:
+                    dict_unique_total[repo][file]['Classes'] = defaultdict(int)
+                dict_unique_total[repo][file]['Classes'][class_name] += 1
 
+    return dict_total, dict_summary, dict_repo, dict_unique_total
 
-def ini_total(type, key):
-    """ Initialize or increment values. """
-    if key not in dict_summary[type]:
-        if key != "":
-            dict_summary[type][key] = 1
-    else:
-        dict_summary[type][key] += 1
-
-
-def ini_repo(repo, type, key):
-    """ Initialize or increment values. """
-    if key not in dict_repo[repo][type]:
-        if key != "":
-            dict_repo[repo][type][key] = 1
-    else:
-        dict_repo[repo][type][key] += 1
-
-
-def ini_values(repo, file, type, key):
-    """ Initialize or increment values. """
-    if key not in dict_total[repo][file][type]:
-        if key != "":
-            dict_total[repo][file][type][key] = 1
-    else:
-        dict_total[repo][file][type][key] += 1
-
-
-def write_Results(repo):
-    """ Create a .txt file with a summary of results. """
-    # Get current path
+def write_Results(repo, dict_total, dict_unique_total, dict_summary, dict_repo):
+    """ Create .json files with summaries of results. """
     wd = os.getcwd()
-    # Create new folder
     try:
         os.mkdir(wd + "/DATA_JSON")
     except FileExistsError:
         pass
-    # Create a file for each repository
-    name_file = wd + "/DATA_JSON/" + repo + '.json'
-    repository = dict()
-    repository[repo] = dict_total[repo]
+
+    # Write normal results
+    name_file = f"{wd}/DATA_JSON/{repo}.json"
     with open(name_file, 'w') as file:
-        json.dump(repository, file, indent=4)
-    # Create a total file
-    name_file = wd + "/DATA_JSON/total_data.json"
-    with open(name_file, 'w') as file:
+        json.dump({repo: dict_total[repo]}, file, indent=4)
+
+    # Write unique occurrence results
+    unique_name_file = f"{wd}/DATA_JSON/{repo}_unique.json"
+    with open(unique_name_file, 'w') as file:
+        json.dump({repo: dict_unique_total[repo]}, file, indent=4)
+
+    # Write total data
+    total_name_file = f"{wd}/DATA_JSON/total_data.json"
+    with open(total_name_file, 'w') as file:
         json.dump(dict_total, file, indent=4)
-    # Create a summary data
-    name_file = wd + "/DATA_JSON/summary_data.json"
-    with open(name_file, 'w') as file:
+
+    # Write summary data
+    summary_name_file = f"{wd}/DATA_JSON/summary_data.json"
+    with open(summary_name_file, 'w') as file:
         json.dump(dict_summary, file, indent=4)
-    # Create a repo data
-    name_file = wd + "/DATA_JSON/repo_data.json"
-    with open(name_file, 'w') as file:
+
+    # Write repo data
+    repo_name_file = f"{wd}/DATA_JSON/repo_data.json"
+    with open(repo_name_file, 'w') as file:
         json.dump(dict_repo, file, indent=4)
+        
+def show_Results(dict_total, dict_summary, dict_repo, dict_unique_total):
+    """ Return the result of the analysis. """
+    result = '=====================================\nRESULT OF THE ANALYSIS:\n'
 
+    num_files = sum(len(files) for files in dict_total.values())
+    result += f'Analyzed .py files: {num_files}\n'
+    
+    result += '=====================================\n'
+    
+    levels = sorted(dict_summary['Levels'].items())
+    for level, count in levels:
+        result += f'Elements of level {level}: {count}\n'
 
-def show_Results():
-    """ Returns the result of the analysis. """
-    repos = dict_total.keys()
-    num_files = 0
-    result = '====================================='
-    result += '\nRESULT OF THE ANALYSIS:'
-    for keys in repos:
-        files = dict_total[keys]
-        for key, value in files.items():
-            num_files += 1
+    result += '=====================================\n'
 
-    result += ('\nAnalyzed .py files: ' + str(num_files))
+    """# Assuming dict_summary and configuration file paths
+    # Initialize dict_result_unique and dict_total
+    dict_result_unique = {
+        'Levels': defaultdict(int),
+        'Classes': defaultdict(lambda: defaultdict(int))
+    }
+    dict_total = {}  # Replace with actual data loading
 
-    levels = dict_summary['Levels']
-    levels = sorted(levels.items())
-    for key, value in levels:
-        result += ('\nElements of level ' + key + ': ' + str(value))
-    result += '\n====================================='
-    return result
+    # Load configuration file to map classes to levels
+    config = configparser.ConfigParser()
+    config.read('configuration.cfg')
 
+    # Initialize result container
+    result_unique = defaultdict(int)
+
+    # Iterate over sorted classes
+    classes = sorted(dict_summary['Classes'].items())
+    for clase, count in classes:
+        print("\nclase: ", clase)
+        # Check if clase exists in config sections
+        mapped_level = None
+        for section in config.sections():
+            if clase == section:
+                mapped_level = option
+                break
+            # Split the section keys to check each class within the section
+            for option in config.options(section):
+                string = option + " " + section
+                string2 = "'" + option + "' " + section
+                if clase.lower() == string.lower():
+                    mapped_level = option.keys()
+                    break
+                elif clase.lower() == string2.lower():
+                    mapped_level = option
+                    break
+
+        if mapped_level:
+            result_unique[mapped_level] += count
+        else:
+            print(f"Level not found for class: {clase}")
+
+    # Display or process result_unique as needed
+    for level, count in result_unique.items():
+        print(f"Classes of level {level}:")
+        for clase, clase_count in dict_result_unique['Classes'][level].items():
+            print(f"  - {clase}: {clase_count}")
+        print(f"Total classes of level {level}: {count}")"""
+
+    """classes = sorted(dict_summary['Classes'].items())
+    for clase, count in classes:
+        result += f'Classes {clase}: {count}\n'
+
+    result += '====================================='"""
+    return result, num_files
 
 def read_Json():
     """ Read json file. """
     with open('data.json') as file:
         data = json.load(file)
-        extract_Levels(data)
-        result = show_Results()
-        return result
-
+        dict_total, dict_summary, dict_repo, dict_unique_total = extract_Levels(data)
+        return dict_total, dict_summary, dict_repo, dict_unique_total
 
 if __name__ == "__main__":
-    read_Json()
+    result = read_Json()
+    print(result)

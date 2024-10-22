@@ -1,0 +1,160 @@
+{
+    "": {
+        "test.py": [
+            {
+                "Class": "Formatted Value",
+                "Start Line": "13",
+                "End Line": "13",
+                "Displacement": "6",
+                "Level": "A1"
+            },
+            {
+                "Class": "Formatted Value",
+                "Start Line": "16",
+                "End Line": "16",
+                "Displacement": "6",
+                "Level": "A1"
+            },
+            {
+                "Class": "Formatted Value",
+                "Start Line": "19",
+                "End Line": "19",
+                "Displacement": "6",
+                "Level": "A1"
+            },
+            {
+                "Class": "Formatted Value",
+                "Start Line": "20",
+                "End Line": "20",
+                "Displacement": "6",
+                "Level": "A1"
+            },
+            {
+                "Class": "Joined String",
+                "Start Line": "13",
+                "End Line": "13",
+                "Displacement": "6",
+                "Level": "A1"
+            },
+            {
+                "Class": "Joined String",
+                "Start Line": "16",
+                "End Line": "16",
+                "Displacement": "6",
+                "Level": "A1"
+            },
+            {
+                "Class": "Joined String",
+                "Start Line": "19",
+                "End Line": "19",
+                "Displacement": "6",
+                "Level": "A1"
+            },
+            {
+                "Class": "Joined String",
+                "Start Line": "20",
+                "End Line": "20",
+                "Displacement": "6",
+                "Level": "A1"
+            },
+            {
+                "Class": "Print",
+                "Start Line": "13",
+                "End Line": "13",
+                "Displacement": "0",
+                "Level": "A1"
+            },
+            {
+                "Class": "Print",
+                "Start Line": "16",
+                "End Line": "16",
+                "Displacement": "0",
+                "Level": "A1"
+            },
+            {
+                "Class": "Print",
+                "Start Line": "19",
+                "End Line": "19",
+                "Displacement": "0",
+                "Level": "A1"
+            },
+            {
+                "Class": "Print",
+                "Start Line": "20",
+                "End Line": "20",
+                "Displacement": "0",
+                "Level": "A1"
+            },
+            {
+                "Class": "Simple Atributte",
+                "Start Line": "7",
+                "End Line": "7",
+                "Displacement": "8",
+                "Level": "A2"
+            },
+            {
+                "Class": "Simple Atributte",
+                "Start Line": "13",
+                "End Line": "13",
+                "Displacement": "29",
+                "Level": "A2"
+            },
+            {
+                "Class": "Simple Atributte",
+                "Start Line": "16",
+                "End Line": "16",
+                "Displacement": "26",
+                "Level": "A2"
+            },
+            {
+                "Class": "Special Class Attribute __class__",
+                "Start Line": "19",
+                "End Line": "19",
+                "Displacement": "30",
+                "Level": "B2"
+            },
+            {
+                "Class": "Special Class Attribute __dict__",
+                "Start Line": "20",
+                "End Line": "20",
+                "Displacement": "29",
+                "Level": "B2"
+            },
+            {
+                "Class": "Simple Assignment",
+                "Start Line": "10",
+                "End Line": "10",
+                "Displacement": "0",
+                "Level": "A1"
+            },
+            {
+                "Class": "Simple Assignment",
+                "Start Line": "3",
+                "End Line": "3",
+                "Displacement": "4",
+                "Level": "A1"
+            },
+            {
+                "Class": "Simple Assignment",
+                "Start Line": "7",
+                "End Line": "7",
+                "Displacement": "8",
+                "Level": "A1"
+            },
+            {
+                "Class": "Function with Simple argument",
+                "Start Line": "5",
+                "End Line": "7",
+                "Displacement": "4",
+                "Level": "A1"
+            },
+            {
+                "Class": "Simple Class ",
+                "Start Line": "1",
+                "End Line": "7",
+                "Displacement": "0",
+                "Level": "B1"
+            }
+        ]
+    }
+}
